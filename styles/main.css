@@ -1,0 +1,72 @@
+.timedetails{
+  width:100%;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 5px 2px #0c0c0c2b;
+  padding:20px;
+  border: 6px solid rgba(30, 214, 253, 0.01);;
+  margin: 20px 0px;
+  font-size: 12px !important;
+}
+.timedetails .timelog{
+  width:440px;
+  float: left;
+  margin-right: 10px;
+}
+.timedetails .timelogsummary{
+  width:340px;
+  float: left;
+}
+.timedetails .timelogbox{
+  width:100%;
+  float: left;
+}
+.timedetails p {
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  
+}
+.timedetails .timelog p{
+  width: 50% !important;
+}
+.timedetails .timelogsummary p{
+  width: 100% !important;
+}
+.timedetails select.changestatusoftime {
+  font-size: 12px;
+  margin: 0px !important;
+  padding: 5px !important;
+  float: left;
+  height: auto;
+  width: 50%;
+  padding-right: 25px !important;
+}
+.timelogbox {
+  padding: 4px 4px;
+  
+  color: #FFFFFF;
+  margin: 1px;
+}
+
+.timelogbox[data-statuscolor="1"]{
+  background-color: #00b77a;
+}
+.timelogbox[data-statuscolor="2"]{
+  background-color:blue;
+}
+.timelogbox[data-statuscolor="3"]{
+  background-color:orange;
+}
+.timelogbox[data-statuscolor="4"]{
+  background-color:brown;
+}
+.timelogbox[data-statuscolor="5"]{
+  background-color:#09a5a5;
+}
+.timelogbox[data-statuscolor="6"]{
+  background-color:#927e66;
+}
+.timelogbox[data-statuscolor="7"]{
+  background-color:cornflowerblue;
+}
