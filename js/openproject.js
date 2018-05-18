@@ -17,7 +17,7 @@
 
     };
 
-    function peekandsettime() {
+    function peekandsettime(callback) {
         peek("currentUserActivities", function (result) {
             var datetimenow = new Date();
             $("#time_entry_hours").closest("div").find(".timedetails").remove();
@@ -34,7 +34,7 @@
                 var thisyear = thisdate.getFullYear()
                 if (thisday == day && thismonthNo == monthNo && thisyear == year)
                 {
-                    return v.state == "active" || v.state == "locked";
+                    return v.state == "active" || v.state == "recorded" || v.state == "locked";
                 }
                 return false;
             });
@@ -44,8 +44,8 @@
              var laststatusname = "locked";
             var objecti = 0;
             
-            var totaltimespend = 0;
-            var totaltimeinterval = 0;
+            ////var totaltimespend = 0;
+            ////var totaltimeinterval = 0;
            
             var nowday = datetimenow.getDate();
             var nowmonthNo = datetimenow.getMonth();
@@ -69,28 +69,21 @@
             $.each(result, function (i, v) {
                 var thisdate = new Date(v.date);
                 var allowtosetlastdate = true;
-                    ////if (thisdate - lastdate <= 60000)
-                    ////{
-                    ////    lastdate = secondlastdate;
-                    ////    laststatusname = secondlaststatusname;
-                    ////    laststatus=secondlaststatus;
-                    ////}
                     
                     if (laststatusname == v.state) {
                         allowtosetlastdate = false;
                     }
                     else {
-                        ////If less than 1 minute
                             filtereddata[objecti]={from:lastdate, to:thisdate, state:laststatusname};
                             objecti++;
-                            if(laststatusname=="active")
-                            {
-                                totaltimespend+=thisdate-lastdate;
-                            }
-                            else
-                            {
-                                totaltimeinterval+=thisdate-lastdate;
-                            }
+                            ////if(laststatusname=="active")
+                            ////{
+                            ////    totaltimespend+=thisdate-lastdate;
+                            ////}
+                            ////else
+                            ////{
+                            ////    totaltimeinterval+=thisdate-lastdate;
+                            ////}
                       
                     }
                     ////if(filtereddata.length==0||(filtereddata[filtereddata.length-1].active!=v.active))
@@ -108,7 +101,7 @@
                 }
             });
            
-            debugger
+        
             
 
             $("#time_entry_hours").closest("div").append("<div class='timedetails'><div class='timelog'></div><div class='timelogsummary'></div></div>");
@@ -122,7 +115,7 @@
                 / 60000); // minutes
 
                 var timestring = v.from.getHours() + ":" + v.from.getMinutes() + " to " + v.to.getHours() + ":" + v.to.getMinutes()
-
+                v.state=v.state=="recorded" ? "active" : v.state;
                 $(".timedetails .timelog").append(`<div class="timelogbox" data-timefrom="${v.from.getHours() + ":" + v.from.getMinutes()}" data-timeto="${v.to.getHours() + ":" + v.to.getMinutes()}"  data-timespend="${diffMs}"><p>${timestring} ${v.state} - ( ${diffHrs} : ${diffMins} )</p>
                     <select class='changestatusoftime'>
                     <option value='1'>Working on ${$(".form--field-instructions").text()} </option>
@@ -171,18 +164,18 @@
             peek("changedUserActivities",
                 function (changedUserActivities)
                 {
-                    debugger;
+                    
                     if (changedUserActivities) {
                         $.each(changedUserActivities,
                             function (changeddetailsi, changeddetails)
                             {
-                                var element=$(".timelogbox[data-timespend="+
+                                var element=$(".timelogbox[data-timespend='"+
                                     changeddetails.timespend+
-                                    "][data-timefrom="+
+                                    "'][data-timefrom='"+
                                     changeddetails.timefrom+
-                                    "][data-timeto="+
-                                    changeddetails.timetoss+
-                                    "] .changestatusoftime");
+                                    "'][data-timeto='"+
+                                    changeddetails.timeto+
+                                    "'] .changestatusoftime");
                                 element
                                     .val(changeddetails.value).trigger("change")
                                 if(changeddetails.disabled)
@@ -193,6 +186,12 @@
                             })
 
 
+                    }
+                    
+                    if(callback)
+                    {
+                        debugger;
+                        callback();
                     }
                 });
 
@@ -213,15 +212,67 @@
 
         });
     }
+
+    var activateinterval=true;
     if ($("#time_entry_hours").length > 0) {
+        $("body").on("mouseenter",".timedetails",function ()
+        {
+            activateinterval=false;
+        }) 
+        $("body").on("mouseleave",".timedetails",function () {
+            activateinterval = true;
+        });
         peekandsettime();
         setInterval(function () {
-            peekandsettime();
+            if(activateinterval)
+            {
+                peekandsettime();
+            }
         }, 10000);
-        $("body").on("click", "#new_time_entry [type=submit]", function () {
+        $("body").on("submit", "#new_time_entry", function (e)
+        {
+            if(e.originalEvent)
+            {
+                $(this).find("[type=submit]").hide();
+                e.preventDefault();
+                activateinterval=false;
+                var currentUserActivitiesList=[];
 
-            localStorage.setItem("lasttimeupdate", datetimenow);
-            localStorage.setItem("timetoescape", 0);
+                peek("changedUserActivities",
+                    function(result)
+                    {
+                        peek("currentUserActivities",
+                            function(currentUserActivities)
+                            {
+                                var datenow=new Date();
+                                var currentUserActivitiesList=currentUserActivities;
+                                currentUserActivitiesList.push({state:"recorded", date:datenow.toString()});
+                                currentUserActivitiesList.push({state:"active", date:datenow.toString()});
+                                keep("currentUserActivities", currentUserActivitiesList);
+                                peekandsettime(function()
+                                {
+                                    setTimeout(function()
+                                        {
+                                            $(
+                                                    ".timedetails .timelog .timelogbox[data-statuscolor=1] .changestatusoftime")
+                                                .each(function()
+                                                {
+                                                    $(this).prop("disabled", true);
+                                                    changeactivity($(this), result);
+                                                });
+                                            keep("changedUserActivities", result);
+                                            setTimeout(function()
+                                                {
+                                                    $("#new_time_entry").submit();
+                                                    $("#new_time_entry").find("[type=submit]").show();
+                                                },
+                                                1000);
+                                        },
+                                        1000);
+                                });
+                            });
+                    });
+            }
         });
         $("body")
             .on("keyup blur",
@@ -244,10 +295,10 @@
 
             return JSON.stringify(obj) === JSON.stringify({});
         }
-        function changeactivity(th)
+        function changeactivity(th, result)
         {
-            peek("changedUserActivities",
-                function (result) {
+            activateinterval = false;
+            
                     if (result&&result.length > 70) {
                         result.splice(0, result.length - 70);
                     }
@@ -264,17 +315,24 @@
                         date: reporteddate,
                         disabled: th.prop("disabled")
                     });
-                    keep("changedUserActivities", result)
-                });
+                    
+                    activateinterval = true;
+                
         }
         $("body")
             .on("change",
                 ".timelogbox .changestatusoftime",
                 function(e)
                 {
+                    ////keep("changedUserActivities", []);
                     if(e.originalEvent)
                     {
-                        changeactivity($(this));
+                        peek("changedUserActivities",
+                            function(result)
+                            {
+                                changeactivity($(this), result);
+                                keep("changedUserActivities", result);
+                            });
                     }
                     $(this).closest(".timelogbox").attr("data-statuscolor", $(this).val());
                     $(".timedetails .timelogsummary").html("");
