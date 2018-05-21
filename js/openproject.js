@@ -17,7 +17,7 @@
 
     };
 
-    function peekandsettime(callback) {
+    function peekandsettime(callback,stopfillactivitydate) {
         peek("currentUserActivities", function (result) {
             var datetimenow = new Date();
             $("#time_entry_hours").closest("div").find(".timedetails").remove();
@@ -26,6 +26,11 @@
             var day = reporteddate.getDate();
             var monthNo = reporteddate.getMonth();
             var year = reporteddate.getFullYear()
+            result = result.sort(function (a,b) {
+                var adate = new Date(a.date);
+                var bdate = new Date(b.date);
+                return adate>bdate?1:adate<bdate?-1:0;
+            });
             
             result = result.filter(function (v, i) {
                 var thisdate = new Date(v.date);
@@ -38,6 +43,7 @@
                 }
                 return false;
             });
+            if(result.length>0){
             var todaysdatestring=(monthNo+1)+"-"+day+"-"+year;
             var lastdate = new Date(todaysdatestring);
           
@@ -52,7 +58,9 @@
             var nowyear = datetimenow.getFullYear()
             if(nowday==day&&nowmonthNo==monthNo&&nowyear==year)
             {
+                if(result[result.length-1].state!="active"){
                 result.push({state:"active", date:datetimenow.toString()});
+                }
             }
             else
             {
@@ -69,11 +77,7 @@
             $.each(result, function (i, v) {
                 var thisdate = new Date(v.date);
                 var allowtosetlastdate = true;
-                    
-                    if (laststatusname == v.state) {
-                        allowtosetlastdate = false;
-                    }
-                    else {
+                    if(i!=0){
                             filtereddata[objecti]={from:lastdate, to:thisdate, state:laststatusname};
                             objecti++;
                             ////if(laststatusname=="active")
@@ -90,21 +94,26 @@
                     ////{
                     ////    filtereddata.push(v);
                     ////}
-
-
-                
-                if (allowtosetlastdate)
-                {
-                   
                     lastdate = thisdate;
                     laststatusname = v.state;
-                }
+                
             });
            
         
             
 
-            $("#time_entry_hours").closest("div").append("<div class='timedetails'><div class='timelog'></div><div class='timelogsummary'></div></div>");
+            $("#time_entry_hours").closest("div").append(`<div class='timedetails'><div class='timedetailshead'><div class='timeloghead pad10'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>Activities</div><div class='timelogsummaryhead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+    </svg>Summary</div><div class='timelogoptionshead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <path fill="none" d="M0 0h20v20H0V0z"/>
+    <path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
+</svg>Options</div></div><div class='timedetailsbody'><div class='timelog pad10'></div><div class='timelogsummary pad10'></div><div class='timelogoptions pad10'><div class='timedetailsformgroup'><label>Any Time Updations/Split time in records</label><input type='time' id='splittime' value='09:00'/></div><div class='timedetailsformgroup'><label>What was the status</label><select id='splittimestatus'><option >Active</option><option >Inactive</option></select></div><div class='timedetailsformgroup pad10'><button class="button -highlight" type='button' id="splittimego">Change time details</button></div></div></div></div>`);
+debugger;
+
             $.each(filtereddata, function (i, v) {
 
                 var diffMs = v.to - v.from;
@@ -114,9 +123,22 @@
                 var diffMins = Math.round(((diffMs % 86400000) % 3600000)
                 / 60000); // minutes
 
-                var timestring = v.from.getHours() + ":" + v.from.getMinutes() + " to " + v.to.getHours() + ":" + v.to.getMinutes()
+                var timestring = (v.from.getHours()>12?v.from.getHours()-12+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" PM":v.from.getHours()+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" AM" ) + "<br/>to<br/>" + (v.to.getHours()>12?v.to.getHours()-12+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" PM":v.to.getHours()+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" AM");
                 v.state=v.state=="recorded" ? "active" : v.state;
-                $(".timedetails .timelog").append(`<div class="timelogbox" data-timefrom="${v.from.getHours() + ":" + v.from.getMinutes()}" data-timeto="${v.to.getHours() + ":" + v.to.getMinutes()}"  data-timespend="${diffMs}"><p>${timestring} ${v.state} - ( ${diffHrs} : ${diffMins} )</p>
+                v.state=v.state=="locked" ? "inactive" : v.state;
+var inactivetext=`<svg title="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<path fill="none" d="M0 0h24v24H0V0z"/>
+<path d="M23 16c0 1.1-.9 2-2 2h-1l-2-2h3V4H6L4 2h17c1.1 0 2 .9 2 2v12zm-5.5 2l-2-2zm-2.6 0l6 6 1.3-1.3-4.7-4.7-2-2L1.2 1.8 0 3.1l1 1V16c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h.9zM3 16V6.1l9.9 9.9H3z"/>
+</svg>`;
+var activetext=`<svg xmlns="http://www.w3.org/2000/svg" title=""  width="24" height="24" viewBox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"/>
+<path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+</svg>`;
+
+
+                $(".timedetails .timelog").append(`<div  data-status="${v.state}" class="timelogbox pad10" data-timefrom="${v.from.getHours() + ":" + v.from.getMinutes()}" data-timeto="${v.to.getHours() + ":" + v.to.getMinutes()}"  data-timespend="${diffMs}"><div class="timeline-icon "><p class="timeline-iconcontent">${timestring}</p></div>
+                <div class="timeline-content" title="${v.state=="active"?"You were active in this PC":"You were not active in this PC"}">
+                <p class="timeline-title">${v.state=="active"?activetext:inactivetext}<span class="timlinetimespan"> ${diffHrs < 10?"0"+diffHrs.toString():diffHrs}H : ${diffMins < 10?"0"+diffMins.toString():diffMins}M </span></p>
                     <select class='changestatusoftime'>
                     <option value='1'>Working on ${$(".form--field-instructions").text()} </option>
                     <option value='2'>Working on other projects </option>
@@ -125,7 +147,7 @@
                     <option value='5'>Meetings </option>
                     <option value='6'>At Home</option>
                     <option value='7'>Playing Games</option>
-                    </select></div>`);
+                    </select></div></div>`);
                 var lastselectbox = $(".timedetails .timelog").find(".changestatusoftime:last");
                 var daynoonstart = new Date(todaysdatestring);
                 daynoonstart.setHours(12);
@@ -137,15 +159,14 @@
                 daynoonend.setSeconds(00);
                 
                 
-                
-                if(v.state=="locked"&&diffHrs>6)
+                if(v.state=="inactive"&&diffHrs>6)
                 {
                     lastselectbox.val(6);
                 }else
-                if (v.state == "locked" && (diffHrs < 2 && (diffHrs >= 1 || (diffHrs == 0 && diffMins >= 10))) && v.from >= daynoonstart && v.to <= daynoonend) {
+                if (v.state == "inactive" && (diffHrs < 2 && (diffHrs >= 1 || (diffHrs == 0 && diffMins >= 10))) && v.from >= daynoonstart && v.to <= daynoonend) {
                     lastselectbox.val(3);
                 }else
-                if(v.state=="locked"&&
+                if(v.state=="inactive"&&
                     (diffHrs<1&&(diffHrs>=1||(diffHrs==0&&diffMins>=10)))&&
                     v.from<daynoonstart&&
                     v.to>daynoonend)
@@ -153,12 +174,17 @@
                     lastselectbox.val(4);
                 }
                 else
-                if (v.state == "locked" && ((diffHrs >= 1 || (diffHrs == 0 && diffMins >= 10))))
+                if (v.state == "inactive" && ((diffHrs >= 1 || (diffHrs == 0 && diffMins >= 10))))
                 {
                     lastselectbox.val(5);
+                }else
+                if(stopfillactivitydate&&v.to>stopfillactivitydate)
+                {
+                    lastselectbox.val(2);
                 }
 
                 lastselectbox.trigger("change");
+                
             });
 
             peek("changedUserActivities",
@@ -178,10 +204,13 @@
                                     "'] .changestatusoftime");
                                 element
                                     .val(changeddetails.value).trigger("change")
-                                if(changeddetails.disabled)
+                                if(changeddetails.disabled&&element.length>0)
                                 {
+                                    element.closest(".timelogbox").attr("data-disabled",true);
                                     element.after("<p>" + changeddetails.text + "</p>");
+                                    element.closest(".timelogbox").trigger("changedtime");
                                     element.remove();
+                                    
                                 }
                             })
 
@@ -190,24 +219,16 @@
                     
                     if(callback)
                     {
-                        debugger;
+                        
                         callback();
                     }
+                    $(".timedetails .timelog .timelogbox").each(function(){
+                        $(this).find(".timeline-content").css("margin",($(this).outerHeight()-$(this).find(".timeline-content").outerHeight())/2+"px -3px");
+                    })
                 });
-
-            // // var currentTime = (new Date()).getTime();
-
-            // // var diffMs = datetimenow - starttimeindate;
-            // // diffMs = diffMs - timetoescape;
-            // // var diffDays = Math.floor(diffMs / 86400000); // days
-            // // var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-            // // var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-
-
-            // // $("#time_entry_hours").closest("div").append("<div class='timedetails'><br/><br/><p style='width:100%'>Time Spend = " + diffHrs + ":" + diffMins + "</p><div></div><p style='width:100%'>Intervals = " + Math.floor((timetoescape % 86400000) / 3600000) + ":" + Math.round(((timetoescape % 86400000) % 3600000) / 60000) + "</p></div>");
-
-            // // $("#time_entry_hours").val((diffHrs + parseFloat((diffMins / 60).toFixed(2))).toFixed(2));
-
+            }else{
+                $("#time_entry_hours").closest("div").find(".timedetails").html("No Records Found")
+            }
 
 
         });
@@ -226,11 +247,30 @@
         setInterval(function () {
             if(activateinterval)
             {
-                peekandsettime();
+             ////   peekandsettime();
             }
         }, 10000);
+        
+        $("body").on("click", "#splittimego", function (e)
+        {
+         
+            if($("#splittime").val()){
+                var reporteddate = $("#time_entry_spent_on").val();
+var seleteddate=new Date(reporteddate+" "+$("#splittime").val());
+// // var datenow=new Date(reporteddate);
+// // datenow.setHours(seleteddate.getHours());
+// // datenow.setMinutes(seleteddate.getMinutes());
+peek("currentUserActivities",
+function(currentUserActivitiesList)
+{currentUserActivitiesList.push({state:$("#splittimestatus").val()=="Active"?"active":"locked", date:seleteddate.toString()});
+    keep("currentUserActivities", currentUserActivitiesList);
+    peekandsettime();
+});
+}
+        });
         $("body").on("submit", "#new_time_entry", function (e)
         {
+            if($("#time_entry_hours").val()&&$("#time_entry_spent_on").val()){
             if(e.originalEvent)
             {
                 $(this).find("[type=submit]").hide();
@@ -241,23 +281,55 @@
                 peek("changedUserActivities",
                     function(result)
                     {
+                       
                         peek("currentUserActivities",
                             function(currentUserActivities)
                             {
-                                var datenow=new Date();
-                                var currentUserActivitiesList=currentUserActivities;
-                                currentUserActivitiesList.push({state:"recorded", date:datenow.toString()});
-                                currentUserActivitiesList.push({state:"active", date:datenow.toString()});
+                               var currentUserActivitiesList=currentUserActivities;
+                               var time = $("#time_entry_hours").val();
+                               var timeParts = time.split(".");
+                             if(!timeParts[1]){
+                                timeParts[1]=0;
+                             }
+                                var allowedmilliseconds=(+timeParts[0] * (60000 * 60)) + (+(timeParts[1]*60/100) * 60000);
+                                
+                                var reportedtime = new Date($("#time_entry_spent_on").val()+" 00:00");
+                               var idfoundreportedtime=false;
+                                var timeussed=0;
+                                $(".timedetails .timelog .timelogbox[data-statuscolor=1]:not([data-disabled])")
+                                .each(function()
+                                {
+                                    if(!idfoundreportedtime){
+                                    var whatthelasttimeinseconds=timeussed;
+                                   timeussed+=parseInt($(this).attr("data-timespend"));
+                                   if(timeussed>allowedmilliseconds){
+                                    var secondstoincrease=allowedmilliseconds-whatthelasttimeinseconds;
+                                    idfoundreportedtime=true;
+
+                                    reportedtime = new Date($("#time_entry_spent_on").val()+" "+$(this).attr("data-timefrom"));
+                                    reportedtime.setMilliseconds(secondstoincrease);
+                                    return true;
+                                   }
+                                }
+                                });
+                                if(!idfoundreportedtime){
+                                reportedtime= new Date();
+                            }
+                                
+                                currentUserActivitiesList.push({state:"active", date:reportedtime.toString()});
                                 keep("currentUserActivities", currentUserActivitiesList);
                                 peekandsettime(function()
                                 {
                                     setTimeout(function()
                                         {
-                                            $(
-                                                    ".timedetails .timelog .timelogbox[data-statuscolor=1] .changestatusoftime")
+                                        
+                                            $(".timedetails .timelog .timelogbox[data-statuscolor=1] .changestatusoftime")
                                                 .each(function()
                                                 {
                                                     $(this).prop("disabled", true);
+                                                    if(result.length>50){
+                                                        result.splice(0,result.length-50);
+                                                      }
                                                     changeactivity($(this), result);
                                                 });
                                             keep("changedUserActivities", result);
@@ -266,13 +338,14 @@
                                                     $("#new_time_entry").submit();
                                                     $("#new_time_entry").find("[type=submit]").show();
                                                 },
-                                                1000);
+                                                500);
                                         },
-                                        1000);
-                                });
+                                        500);
+                                },reportedtime);
                             });
                     });
             }
+        }
         });
         $("body")
             .on("keyup blur",
@@ -296,15 +369,13 @@
             return JSON.stringify(obj) === JSON.stringify({});
         }
         function changeactivity(th, result)
-        {
+        {if(th.length>0){
             activateinterval = false;
             
                     if (result&&result.length > 70) {
                         result.splice(0, result.length - 70);
                     }
-                    if (!result) {
-                        result = [];
-                    }
+                    
                     var reporteddate = $("#time_entry_spent_on").val();
                     result.push({
                         timespend: th.closest(".timelogbox").attr("data-timespend"),
@@ -317,26 +388,46 @@
                     });
                     
                     activateinterval = true;
-                
+                }
         }
         $("body")
-            .on("change",
-                ".timelogbox .changestatusoftime",
+        .on("change blur",
+            "#time_entry_spent_on",
+            function(e)
+            {
+                var th=$(this);
+               setTimeout(function(){ if(th.val()){
+peekandsettime();
+}
+},2000)
+            })
+        $("body")
+            .on("change changedtime",
+                ".timelogbox,.timelogbox .changestatusoftime",
                 function(e)
                 {
                     ////keep("changedUserActivities", []);
                     if(e.originalEvent)
                     {
+                        var th=$(this);
                         peek("changedUserActivities",
                             function(result)
                             {
-                                changeactivity($(this), result);
+                                if (!result) {
+                                result = [];
+                                }
+                                if(result.length>50){
+                                    result.splice(0,result.length-50);
+                                  }
+                                changeactivity(th, result);
                                 keep("changedUserActivities", result);
                             });
                     }
+                    if($(this).val()){
                     $(this).closest(".timelogbox").attr("data-statuscolor", $(this).val());
+                    }
                     $(".timedetails .timelogsummary").html("");
-                    $(".timelogbox").each(function()
+                    $(".timelogbox:not([data-disabled])").each(function()
                     {
                         var timespend = parseInt($(this).attr("data-timespend"));
                         var exist = $(".timedetails .timelogsummary .timelogbox[data-statuscolor=" + $(this).find(".changestatusoftime").val() + "]")
@@ -350,7 +441,7 @@
                         var diffHrs = Math.floor((timespend % 86400000) / 3600000); // hours
                         var diffMins = Math.round(((timespend % 86400000) % 3600000)
                             / 60000); // minutes
-                        $(".timedetails .timelogsummary").append(`<div class="timelogbox" data-timespend="${timespend}" data-statuscolor="${$(this).find(".changestatusoftime").val()}"><p>${$(this).find(".changestatusoftime option:selected").text()} -  ${diffHrs} Hours : ${diffMins} Minutes</p></div>`);
+                        $(".timedetails .timelogsummary").append(`<div class="timelogbox pad10 timelinesummary-content" data-timespend="${timespend}" data-statuscolor="${$(this).find(".changestatusoftime").val()}"><div class="timelinesummary-contentbox">${$(this).find(".changestatusoftime option:selected").text()} </div><div class="timelinesummary-contentbox timelinesummary-contentboxtime">  ${diffHrs} Hours : ${diffMins} Minutes</div></div>`);
                     });
                    
                     var timespendforthistask = parseInt($(".timedetails .timelogsummary .timelogbox[data-statuscolor=1]").attr("data-timespend"));
@@ -361,7 +452,10 @@
                     if (!$("#time_entry_hours").val() || $("#time_entry_hours").attr("data-processed-by-op"))
                     {
                         $("#time_entry_hours").attr("data-processed-by-op", true);
-                        $("#time_entry_hours").val((diffHrs+parseFloat((diffMins/60).toFixed(2))).toFixed(2));
+                        var timespend=(diffHrs+parseFloat((diffMins/60).toFixed(2))).toFixed(2);
+                        if(!isNaN(timespend)){
+                        $("#time_entry_hours").val(timespend);
+                    }
                     }
                 });
     }
