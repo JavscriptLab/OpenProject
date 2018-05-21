@@ -202,6 +202,11 @@ var activetext=`<svg xmlns="http://www.w3.org/2000/svg" title=""  width="24" hei
                                     "'][data-timeto='"+
                                     changeddetails.timeto+
                                     "'] .changestatusoftime");
+
+if(changeddetails.value=="2"){
+    changeddetails.value=1;
+}
+
                                 element
                                     .val(changeddetails.value).trigger("change")
                                 if(changeddetails.disabled&&element.length>0)
@@ -401,15 +406,10 @@ peekandsettime();
 }
 },2000)
             })
-        $("body")
-            .on("change changedtime",
-                ".timelogbox,.timelogbox .changestatusoftime",
-                function(e)
-                {
-                    ////keep("changedUserActivities", []);
-                    if(e.originalEvent)
+
+            var changestatus=function(e,th){
+                if(e.originalEvent)
                     {
-                        var th=$(this);
                         peek("changedUserActivities",
                             function(result)
                             {
@@ -423,8 +423,8 @@ peekandsettime();
                                 keep("changedUserActivities", result);
                             });
                     }
-                    if($(this).val()){
-                    $(this).closest(".timelogbox").attr("data-statuscolor", $(this).val());
+                    if(th.val()){
+                        th.closest(".timelogbox").attr("data-statuscolor", th.val());
                     }
                     $(".timedetails .timelogsummary").html("");
                     $(".timelogbox:not([data-disabled])").each(function()
@@ -457,6 +457,20 @@ peekandsettime();
                         $("#time_entry_hours").val(timespend);
                     }
                     }
+            }
+        $("body")
+            .on("change",
+                ".timelogbox .changestatusoftime",
+                function(e)
+                {
+                    changestatus(e,$(this))
                 });
+                $("body")
+                .on("changedtime",
+                    ".timelogbox",
+                    function(e)
+                    {
+                        changestatus(e,$(this))
+                    });
     }
 })(myjQuery);
