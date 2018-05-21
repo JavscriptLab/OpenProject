@@ -346,20 +346,20 @@ svg {
 }
 
 .timedetails .timelogbox[data-disabled] .timeline-icon{
-    border-top-color: rgb(149, 149, 149);
-    border-right-color:rgb(149, 149, 149);
+    border-top-color: rgb(149, 149, 149) !important;
+    border-right-color:rgb(149, 149, 149) !important;
   }
   .timedetails .timelogbox[data-disabled] .timeline-iconcontent {
-    color: rgb(149, 149, 149);
+    color: rgb(149, 149, 149) !important;
   }
   .timedetails .timelogbox[data-disabled] .timeline-content{
-    border: 2px solid rgb(149, 149, 149);
+    border: 2px solid rgb(149, 149, 149) !important;
   }
   .timedetails .timelogbox[data-disabled] .timeline-content:before{
-    background: rgb(149, 149, 149);
+    background: rgb(149, 149, 149) !important;
   }
   .timedetails .timelogbox[data-disabled] {
-     opacity: 0.7;
+     opacity: 0.7 !important;
     }
 
 .timelinesummary-content {

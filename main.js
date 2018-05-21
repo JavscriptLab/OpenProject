@@ -41,11 +41,15 @@ chrome.storage.sync.get("currentUserActivities", function (result) {
       currentUserActivitiesList.splice(0,currentUserActivitiesList.length-70);
     }
   }
-  
-  var resultlength=currentUserActivitiesList.length;
+  var sortresults=currentUserActivitiesList.sort(function (a,b) {
+    var adate = new Date(a.date);
+    var bdate = new Date(b.date);
+    return adate>bdate?1:adate<bdate?-1:0;
+});
+  var resultlength=sortresults.length;
   var allowtosetdate=true;
-  if(currentUserActivitiesList.length>0){
-  var lastdate = new Date(currentUserActivitiesList[resultlength-1].date);
+  if(sortresults.length>0){
+  var lastdate = new Date(sortresults[resultlength-1].date);
   var day = lastdate.getDate();
   var monthNo = lastdate.getMonth();
   var year = lastdate.getFullYear()
@@ -56,7 +60,7 @@ chrome.storage.sync.get("currentUserActivities", function (result) {
   var todayyear = todaydate.getFullYear()
   var todaydatestring=(todaymonthNo+1)+"-"+today+"-"+todayyear;
 
-if(currentUserActivitiesList[resultlength-1].state=="active"&&lastdatestring==todaydatestring){
+if(sortresults[resultlength-1].state=="active"&&lastdatestring==todaydatestring){
 allowtosetdate=false;  
 }
 }
@@ -77,8 +81,13 @@ chrome.idle.onStateChanged.addListener(function(state) {
     if(result.currentUserActivities.length>70){
       result.currentUserActivities.splice(0,result.currentUserActivities.length-70);
     }
-    var resultlength=result.currentUserActivities.length;
-    var lastdate = new Date(result.currentUserActivities[resultlength-1].date);
+    var sortresults=result.currentUserActivities.sort(function (a,b) {
+      var adate = new Date(a.date);
+      var bdate = new Date(b.date);
+      return adate>bdate?1:adate<bdate?-1:0;
+  });
+    var resultlength=sortresults.length;
+    var lastdate = new Date(sortresults[resultlength-1].date);
     var day = lastdate.getDate();
     var monthNo = lastdate.getMonth();
     var year = lastdate.getFullYear()
@@ -89,7 +98,7 @@ chrome.idle.onStateChanged.addListener(function(state) {
     var todayyear = todaydate.getFullYear()
     var todaydatestring=(todaymonthNo+1)+"-"+today+"-"+todayyear;
 var allowtosetdate=true;
-if(result.currentUserActivities[resultlength-1].state==state&&lastdatestring==todaydatestring){
+if(sortresults[resultlength-1].state==state&&lastdatestring==todaydatestring){
   allowtosetdate=false;  
 }
     if(allowtosetdate)

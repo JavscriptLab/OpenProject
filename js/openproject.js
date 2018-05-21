@@ -43,7 +43,7 @@
                 }
                 return false;
             });
-            if(result.length>0){
+            if(result&&result.length>0){
             var todaysdatestring=(monthNo+1)+"-"+day+"-"+year;
             var lastdate = new Date(todaysdatestring);
           
@@ -111,7 +111,7 @@
     </svg>Summary</div><div class='timelogoptionshead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
     <path fill="none" d="M0 0h20v20H0V0z"/>
     <path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
-</svg>Options</div></div><div class='timedetailsbody'><div class='timelog pad10'></div><div class='timelogsummary pad10'></div><div class='timelogoptions pad10'><div class='timedetailsformgroup'><label>Any Time Updations/Split time in records</label><input type='time' id='splittime' value='09:00'/></div><div class='timedetailsformgroup'><label>What was the status</label><select id='splittimestatus'><option >Active</option><option >Inactive</option></select></div><div class='timedetailsformgroup pad10'><button class="button -highlight" type='button' id="splittimego">Change time details</button></div></div></div></div>`);
+</svg>Options</div></div><div class='timedetailsbody'><div class='timelog pad10'></div><div class='timelogsummary pad10'></div><div class='timelogoptions pad10'><div class='timedetailsformgroup'><label>Any Time Updations/Split time in records</label><input type='time' id='splittime' value='09:00'/></div><div class='timedetailsformgroup'><label>What was the status</label><select id='splittimestatus'><option >Active</option><option >Inactive</option></select></div><div class='timedetailsformgroup pad10'><button class="button -highlight" type='button' id="splittimego">Change time details</button><p>If you set lock/inactive manually, you must manually unlock/active, otherwise computer lock events will not work on lock/shutdown pc</p></div></div></div></div>`);
 debugger;
 
             $.each(filtereddata, function (i, v) {
@@ -142,7 +142,7 @@ var activetext=`<svg xmlns="http://www.w3.org/2000/svg" title=""  width="24" hei
                     <select class='changestatusoftime'>
                     <option value='1'>Working on ${$(".form--field-instructions").text()} </option>
                     <option value='2'>Working on other projects </option>
-                    <option value='3'>Launch Time </option>
+                    <option value='3'>Lunch Time </option>
                     <option value='4'>Coffee Time </option>
                     <option value='5'>Meetings </option>
                     <option value='6'>At Home</option>
@@ -332,9 +332,12 @@ function(currentUserActivitiesList)
                                                 .each(function()
                                                 {
                                                     $(this).prop("disabled", true);
-                                                    if(result.length>50){
+                                                    if(result&&result.length>50){
                                                         result.splice(0,result.length-50);
                                                       }
+                                                      if (!result){
+                                                        result=[];
+                                                     }
                                                     changeactivity($(this), result);
                                                 });
                                             keep("changedUserActivities", result);
@@ -380,7 +383,9 @@ function(currentUserActivitiesList)
                     if (result&&result.length > 70) {
                         result.splice(0, result.length - 70);
                     }
-                    
+                     if (!result){
+                        result=[];
+                     }
                     var reporteddate = $("#time_entry_spent_on").val();
                     result.push({
                         timespend: th.closest(".timelogbox").attr("data-timespend"),
@@ -416,7 +421,7 @@ peekandsettime();
                                 if (!result) {
                                 result = [];
                                 }
-                                if(result.length>50){
+                                if(result&&result.length>50){
                                     result.splice(0,result.length-50);
                                   }
                                 changeactivity(th, result);
