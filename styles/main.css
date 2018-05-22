@@ -1,5 +1,5 @@
 .timedetails{
-  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.59);
+ 
   width:100%;
   background-color: rgb(255, 255, 255);
   background-image: radial-gradient(403.593px at 51% 60%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
@@ -11,7 +11,9 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
-
+.timedetails.timedetailsmodtheme{
+  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.59);
+}
 .timedetails:hover {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -49,8 +51,20 @@
   float: left;
   
 }
-.timedetails .timelog p{
+.timedetails.timedetailsprotheme p {
+  font-size: 13px;
+}
+.timedetails.timedetailsmodtheme .timelog p{
   width: 80px !important;
+}
+.timedetails.timedetailsprotheme .timeline-iconcontent br{
+display: none;
+}
+.timedetails.timedetailsmodtheme .timelog .timeline-content p{
+  text-overflow: ellipsis;
+  max-height: 49px;
+  overflow: hidden;
+  line-height: 16px;
 }
 .timedetails .timelogsummary p{
   width: 100% !important;
@@ -70,7 +84,7 @@
   width: 99%;
   padding-right: 25px !important;
 }
-.timelog .timelogbox {
+.timedetailsmodtheme .timelog .timelogbox {
     position: relative;
     min-height: 150px;
       max-width: 460px;
@@ -103,10 +117,33 @@
 .timelogbox[data-status="inactive"][data-statuscolor="1"]{
   background-color: #0ae69c;
 } */
-.timedetails .timelog .timeline-title {
+.timedetails.timedetailsmodtheme .timelog .timeline-title {
   width: 100% !important;
 }
-.timedetails .timeline-icon {
+.timedetails.timedetailsprotheme .timeline-iconcontent{
+width:100%;
+float: left;
+}
+.timedetails.timedetailsprotheme .timeline-icon{
+  width:30%;
+  float: left;
+  }
+  .timedetails.timedetailsprotheme .timelog .timelogbox div.timeline-content{
+    width:70%;
+    float: left;
+    border: 0px solid #000000 !important;
+    }
+    .timedetails.timedetailsprotheme .timeline-content p,.timedetails.timedetailsprotheme .timeline-content select{
+      width:68%;
+      margin-left: 1%;
+      float: left;
+      }
+    .timedetails.timedetailsprotheme .timeline-content p.timeline-title{
+      width:30%;
+      float: left;
+      }
+      
+.timedetails.timedetailsmodtheme .timeline-icon {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -122,7 +159,7 @@
   z-index: 1;
   transform: rotate(45deg);
 }
-.timedetails .timeline-iconcontent {
+.timedetails.timedetailsmodtheme .timeline-iconcontent {
   display: block;
   padding: 14px;
   width: 30px;
@@ -143,7 +180,7 @@
   right: 0;
   transform: rotate(-45deg);
 }
-.timedetails .timeline-content{
+.timedetails.timedetailsmodtheme .timeline-content{
     width: 29%;
     float: right;
     background: #ffffff;
@@ -160,7 +197,7 @@ svg {
   float: left;
   margin: -1px 1px 0px 0px;
 }
-.timedetails .timeline-content:before{
+.timedetails.timedetailsmodtheme .timeline-content:before{
     content: "";
     width: 20%;
     height: 15px;
@@ -171,25 +208,29 @@ svg {
     z-index: -1;
     transform: translateY(-50%);
 }
-.timedetails .timelog .timelogbox:nth-child(2n) .timeline-icon{ transform: rotate(-135deg); }
+.timedetails.timedetailsmodtheme .timelog .timelogbox:nth-child(2n) .timeline-icon{ transform: rotate(-135deg); }
 
-.timedetails .timelog .timelogbox:nth-child(2n) .timeline-iconcontent{ transform: rotate(135deg); }
+.timedetails.timedetailsmodtheme .timelog .timelogbox:nth-child(2n) .timeline-iconcontent{ transform: rotate(135deg); }
 
-.timedetails .timelog .timelogbox:nth-child(2n) .timeline-content{ float: left; }
+.timedetails.timedetailsmodtheme .timelog .timelogbox:nth-child(2n) .timeline-content{ float: left; }
 
-.timedetails .timelog .timelogbox:nth-child(2n) .timeline-content:before{
+.timedetails.timedetailsmodtheme .timelog .timelogbox:nth-child(2n) .timeline-content:before{
     left: auto;
     right: -20%;
 }
-.timedetails .timelog .timelogbox{
+.timedetails.timedetailsmodtheme .timelog .timelogbox{
   margin-top: -43.5px;
 }
-.timedetails .timelog .timelogbox:first-child{
+.timedetails.timedetailsmodtheme .timelog .timelogbox:first-child{
   margin-top: 0px;
 
 }
-
-
+.timedetails.timedetailsprotheme .timelogbox{
+  border-bottom: 1px solid #000000;
+}
+.timedetails.timedetailsprotheme .timelogbox[data-statuscolor="1"]{
+   border-bottom-color: #00b77a;
+ }
 .timedetails .timelogbox[data-statuscolor="1"] .timeline-icon{
  
   border-top-color: #00b77a;
@@ -207,7 +248,9 @@ svg {
   background: #00b77a;
 }
 
-
+.timedetails.timedetailsprotheme .timelogbox[data-status="inactive"][data-statuscolor="1"]{
+  border-bottom-color: #00b77a;
+}
 .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-icon{
 
   border-top-color: #0ae69c;
@@ -222,7 +265,9 @@ svg {
 .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-content:before{
   background: #0ae69c;
 }
-
+.timedetails .timelogbox[data-statuscolor="2"]{
+  border-bottom-color: #dd0725;
+}
 .timedetails .timelogbox[data-statuscolor="2"] .timeline-icon{
  
   border-top-color: #dd0725;
@@ -238,7 +283,9 @@ svg {
 .timedetails .timelogbox[data-statuscolor="2"] .timeline-content:before{
   background:#dd0725;
 }
-
+.timedetails .timelogbox[data-statuscolor="3"]{
+  border-bottom-color: #cf8500;
+}
 .timedetails .timelogbox[data-statuscolor="3"] .timeline-icon{
   
   border-top-color: #cf8500;
@@ -253,6 +300,9 @@ svg {
 .timelinesummary-content[data-statuscolor="3"],
 .timedetails .timelogbox[data-statuscolor="3"] .timeline-content:before{
   background: #cf8500;
+}
+.timedetails .timelogbox[data-statuscolor="4"]{
+  border-bottom-color: brown;
 }
 .timedetails .timelogbox[data-statuscolor="4"] .timeline-icon{
   
@@ -269,6 +319,9 @@ svg {
 .timedetails .timelogbox[data-statuscolor="4"] .timeline-content:before{
   background: brown;
 }
+.timedetails .timelogbox[data-statuscolor="5"]{
+  border-bottom-color: #09a5a5;
+}
 .timedetails .timelogbox[data-statuscolor="5"] .timeline-icon{
  
   border-top-color: #09a5a5;
@@ -283,6 +336,9 @@ svg {
 .timelinesummary-content[data-statuscolor="5"],
 .timedetails .timelogbox[data-statuscolor="5"] .timeline-content:before{
   background: #09a5a5;
+}
+.timedetails .timelogbox[data-statuscolor="6"]{
+  border-bottom-color: rgb(58, 151, 231);
 }
 .timedetails .timelogbox[data-statuscolor="6"] .timeline-icon{
   
@@ -299,6 +355,9 @@ svg {
 .timedetails .timelogbox[data-statuscolor="6"] .timeline-content:before{
   background: rgb(58, 151, 231);
 }
+.timedetails .timelogbox[data-statuscolor="7"]{
+  border-bottom-color: #db308f;
+}
 .timedetails .timelogbox[data-statuscolor="7"] .timeline-icon{
  
   border-top-color: #db308f;
@@ -313,6 +372,10 @@ svg {
 .timelinesummary-content[data-statuscolor="7"],
 .timedetails .timelogbox[data-statuscolor="7"] .timeline-content:before{
   background: #db308f;
+}
+.timedetails .timelogbox[data-statuscolor="8"]{
+  
+  border-bottom-color: #00b77a;
 }
 .timedetails .timelogbox[data-statuscolor="8"] .timeline-icon{
   
@@ -329,22 +392,11 @@ svg {
 .timedetails .timelogbox[data-statuscolor="8"] .timeline-content:before{
   background: #00b77a;
 }
-.timedetails .timelogbox[data-statuscolor="9"] .timeline-icon{
-  
-  border-top-color: #00b77a;
-  border-right-color: #00b77a;
-}
-.timedetails .timelogbox[data-statuscolor="9"] .timeline-iconcontent {
-  color: #00b77a;
-}
-.timedetails .timelogbox[data-statuscolor="9"] .timeline-content{
-  border: 2px solid #00b77a;
-}
-.timelinesummary-content[data-statuscolor="9"],
-.timedetails .timelogbox[data-statuscolor="9"] .timeline-content:before{
-  background: #00b77a;
-}
 
+.timedetails .timelogbox[data-disabled]{
+    border-bottom-color: rgb(149, 149, 149) !important;
+  
+}
 .timedetails .timelogbox[data-disabled] .timeline-icon{
     border-top-color: rgb(149, 149, 149) !important;
     border-right-color:rgb(149, 149, 149) !important;
@@ -361,7 +413,10 @@ svg {
   .timedetails .timelogbox[data-disabled] {
      opacity: 0.7 !important;
     }
-
+    .timedetails.timedetailsprotheme .timelogbox[data-disabled] {
+      opacity: 1 !important;
+     }
+ 
 .timelinesummary-content {
   width: 100% !important;
   color: rgb(255, 255, 255);
@@ -419,4 +474,14 @@ svg {
     margin-left: 0px;
     margin-right: 0px;
   }
+}
+.templateselector {
+  max-width: 156px;
+float: right;
+}
+.templateselector .changetheme{
+  padding: 6px 21px 5px 9px;
+  margin:0px;
+  line-height: 12px;
+  height: auto;
 }

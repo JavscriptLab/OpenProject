@@ -8,13 +8,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   {
     var obj = {};
     obj[request.key] = request.value;
-    chrome.storage.sync.set(obj,
+    chrome.storage.local.set(obj,
       function () {
         ////sendResponse(request);
       });
   } 
   if (request.method == "OPgetDataByKey") {
-    chrome.storage.sync.get([request.key], function (result)
+    chrome.storage.local.get([request.key], function (result)
     {
      
      var storageresult = result[request.key];
@@ -34,7 +34,7 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 var currentUserActivitiesList=[];
-chrome.storage.sync.get("currentUserActivities", function (result) {
+chrome.storage.local.get("currentUserActivities", function (result) {
   if(!isEmpty(result)){
     currentUserActivitiesList= result.currentUserActivities;
     if(currentUserActivitiesList.length>70){
@@ -66,7 +66,7 @@ allowtosetdate=false;
 }
 if(allowtosetdate){
   currentUserActivitiesList.push({state:"active",date:dateNow});
-chrome.storage.sync.set({ currentUserActivities: currentUserActivitiesList }, function () {
+chrome.storage.local.set({ currentUserActivities: currentUserActivitiesList }, function () {
   
 });
 }
@@ -76,7 +76,7 @@ var currentStorageDetals=
 chrome.idle.onStateChanged.addListener(function(state) {
  
   if(state != 'idle'){
-  chrome.storage.sync.get("currentUserActivities", function (result) {
+  chrome.storage.local.get("currentUserActivities", function (result) {
     dateNow=new Date().toString();
     if(result.currentUserActivities.length>70){
       result.currentUserActivities.splice(0,result.currentUserActivities.length-70);
@@ -105,7 +105,7 @@ if(sortresults[resultlength-1].state==state&&lastdatestring==todaydatestring){
   result.currentUserActivities.push({date:dateNow,state:state});
      console.log(result.currentUserActivities);
 
-    chrome.storage.sync.set({ currentUserActivities: result.currentUserActivities }, function () {
+    chrome.storage.local.set({ currentUserActivities: result.currentUserActivities }, function () {
       
     });
     });

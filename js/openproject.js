@@ -16,9 +16,13 @@
            });
 
     };
-
+var splittimevalue="09:00";
     function peekandsettime(callback,stopfillactivitydate) {
-        peek("currentUserActivities", function (result) {
+        peek("timedetailsdefaulttheme",
+        function (timedetailsdefaulttheme)
+        {
+           
+            peek("currentUserActivities", function (result) {
             var datetimenow = new Date();
             $("#time_entry_hours").closest("div").find(".timedetails").remove();
             var filtereddata = [];
@@ -102,18 +106,22 @@
         
             
 
-            $("#time_entry_hours").closest("div").append(`<div class='timedetails'><div class='timedetailshead'><div class='timeloghead pad10'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            $("#time_entry_hours").closest("div").append(`<div class='timedetails timedetailsmodtheme'><div class='timedetailshead'><div class='timeloghead pad10'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
             <path d="M0 0h24v24H0z" fill="none"/>
             <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>Activities</div><div class='timelogsummaryhead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        </svg>Activities<div class="templateselector"> <select class='changetheme'>
+        <option value='pro'>Professional Theme</option>
+        <option value='mod' selected>Modern Theme</option>
+        </select></div></div><div class='timelogsummaryhead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
     </svg>Summary</div><div class='timelogoptionshead pad10'><svg fill="white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
     <path fill="none" d="M0 0h20v20H0V0z"/>
     <path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
-</svg>Options</div></div><div class='timedetailsbody'><div class='timelog pad10'></div><div class='timelogsummary pad10'></div><div class='timelogoptions pad10'><div class='timedetailsformgroup'><label>Any Time Updations/Split time in records</label><input type='time' id='splittime' value='09:00'/></div><div class='timedetailsformgroup'><label>What was the status</label><select id='splittimestatus'><option >Active</option><option >Inactive</option></select></div><div class='timedetailsformgroup pad10'><button class="button -highlight" type='button' id="splittimego">Change time details</button><p>If you set lock/inactive manually, you must manually unlock/active, otherwise computer lock events will not work on lock/shutdown pc</p></div></div></div></div>`);
-debugger;
-
+</svg>Options</div></div><div class='timedetailsbody'><div class='timelog pad10'></div><div class='timelogsummary pad10'></div><div class='timelogoptions pad10'><div class='timedetailsformgroup'><label>Any Time Updations/Split time in records</label><input type='time' id='splittime' value='${splittimevalue}'/></div><div class='timedetailsformgroup'><label>What was the status</label><select id='splittimestatus'><option >Active</option><option >Inactive</option></select></div><div class='timedetailsformgroup pad10'><button class="button -highlight" type='button' id="splittimego">Change time details</button><p>If you set lock/inactive manually, you must manually unlock/active, otherwise computer lock events will not work on lock/shutdown pc</p></div></div></div></div>`);
+if(timedetailsdefaulttheme){
+    $(".templateselector .changetheme").val(timedetailsdefaulttheme).trigger("change");
+    }
             $.each(filtereddata, function (i, v) {
 
                 var diffMs = v.to - v.from;
@@ -123,7 +131,7 @@ debugger;
                 var diffMins = Math.round(((diffMs % 86400000) % 3600000)
                 / 60000); // minutes
 
-                var timestring = (v.from.getHours()>12?v.from.getHours()-12+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" PM":v.from.getHours()+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" AM" ) + "<br/>to<br/>" + (v.to.getHours()>12?v.to.getHours()-12+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" PM":v.to.getHours()+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" AM");
+                var timestring = (v.from.getHours()>12?v.from.getHours()-12+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" PM":v.from.getHours()+":" + (v.from.getMinutes()<=9?"0"+v.from.getMinutes().toString():v.from.getMinutes())+" AM" ) + "<br/> to <br/>" + (v.to.getHours()>12?v.to.getHours()-12+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" PM":v.to.getHours()+":" + (v.to.getMinutes()<=9?"0"+v.to.getMinutes().toString():v.to.getMinutes())+" AM");
                 v.state=v.state=="recorded" ? "active" : v.state;
                 v.state=v.state=="locked" ? "inactive" : v.state;
 var inactivetext=`<svg title="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -186,7 +194,7 @@ var activetext=`<svg xmlns="http://www.w3.org/2000/svg" title=""  width="24" hei
                 lastselectbox.trigger("change");
                 
             });
-
+           
             peek("changedUserActivities",
                 function (changedUserActivities)
                 {
@@ -212,7 +220,7 @@ if(changeddetails.value=="2"){
                                 if(changeddetails.disabled&&element.length>0)
                                 {
                                     element.closest(".timelogbox").attr("data-disabled",true);
-                                    element.after("<p>" + changeddetails.text + "</p>");
+                                    element.after("<p title='"+changeddetails.text+"'>" + changeddetails.text + "</p>");
                                     element.closest(".timelogbox").trigger("changedtime");
                                     element.remove();
                                     
@@ -227,16 +235,23 @@ if(changeddetails.value=="2"){
                         
                         callback();
                     }
+                    if($(".templateselector .changetheme").val()=="mod"){
                     $(".timedetails .timelog .timelogbox").each(function(){
                         $(this).find(".timeline-content").css("margin",($(this).outerHeight()-$(this).find(".timeline-content").outerHeight())/2+"px -3px");
                     })
+                }
                 });
             }else{
-                $("#time_entry_hours").closest("div").find(".timedetails").html("No Records Found")
+                if(callback)
+                    {
+                        
+                        callback();
+                    }
             }
 
 
         });
+    });
     }
 
     var activateinterval=true;
@@ -256,9 +271,13 @@ if(changeddetails.value=="2"){
             }
         }, 10000);
         
+        $("body").on("change", "#splittime", function (e)
+        {
+            splittimevalue=$("#splittime").val();
+        });
+
         $("body").on("click", "#splittimego", function (e)
         {
-         
             if($("#splittime").val()){
                 var reporteddate = $("#time_entry_spent_on").val();
 var seleteddate=new Date(reporteddate+" "+$("#splittime").val());
@@ -392,7 +411,7 @@ function(currentUserActivitiesList)
                         timefrom: th.closest(".timelogbox").attr("data-timefrom"),
                         timeto: th.closest(".timelogbox").attr("data-timeto"),
                         value: th.val(),
-                        text: th.find("option:selected").text(),
+                        text: th.find("option:selected").text().replace("Working on ",""),
                         date: reporteddate,
                         disabled: th.prop("disabled")
                     });
@@ -463,13 +482,26 @@ peekandsettime();
                     }
                     }
             }
+            
         $("body")
             .on("change",
-                ".timelogbox .changestatusoftime",
+                ".timedetails .changetheme",
                 function(e)
                 {
-                    changestatus(e,$(this))
+                    $(this).closest(".timedetails").removeClass("timedetailsmodtheme timedetailsprotheme")
+                    $(this).closest(".timedetails").addClass("timedetails"+$(this).val()+"theme");
+                    keep("timedetailsdefaulttheme",$(this).val());
+                    if(e.originalEvent){
+                    peekandsettime();
+                }
                 });
+                $("body")
+                .on("change",
+                    ".timelogbox .changestatusoftime",
+                    function(e)
+                    {
+                        changestatus(e,$(this))
+                    });
                 $("body")
                 .on("changedtime",
                     ".timelogbox",
