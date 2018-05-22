@@ -294,6 +294,7 @@ function(currentUserActivitiesList)
         });
         $("body").on("submit", "#new_time_entry", function (e)
         {
+            try{
             if($("#time_entry_hours").val()&&$("#time_entry_spent_on").val()){
             if(e.originalEvent)
             {
@@ -373,6 +374,10 @@ function(currentUserActivitiesList)
                     });
             }
         }
+    }
+    catch(e){
+        $("#new_time_entry").submit();
+    }
         });
         $("body")
             .on("keyup blur",
