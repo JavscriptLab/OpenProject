@@ -456,12 +456,27 @@ peekandsettime();
                         th.closest(".timelogbox").attr("data-statuscolor", th.val());
                     }
                     $(".timedetails .timelogsummary").html("");
-                    $(".timelogbox:not([data-disabled])").each(function()
+                    $(".timelogbox").each(function()
                     {
                         var timespend = parseInt($(this).attr("data-timespend"));
-                        var exist = $(".timedetails .timelogsummary .timelogbox[data-statuscolor=" + $(this).find(".changestatusoftime").val() + "]")
+                        var changedstatus = $(this).find(".changestatusoftime").val();
+                        if(!changedstatus)
+                        {
+                            changedstatus=1;
+                        }
+                        
+                        var exist = $(".timedetails .timelogsummary .timelogbox[data-statuscolor=" + changedstatus + "]")
+                        if($(this).attr("data-disabled"))
+                        {
+                            exist=exist.filter("[data-disabled]");
+                        }
+                        else
+                        {
+                            exist = exist.not("[data-disabled]");
+                        }
                         if(exist.length>0)
                         {
+                            
                             var existtimespend = parseInt(exist.attr("data-timespend"));
                             timespend += existtimespend;
                             exist.remove();
@@ -470,10 +485,30 @@ peekandsettime();
                         var diffHrs = Math.floor((timespend % 86400000) / 3600000); // hours
                         var diffMins = Math.round(((timespend % 86400000) % 3600000)
                             / 60000); // minutes
-                        $(".timedetails .timelogsummary").append(`<div class="timelogbox pad10 timelinesummary-content" data-timespend="${timespend}" data-statuscolor="${$(this).find(".changestatusoftime").val()}"><div class="timelinesummary-contentbox">${$(this).find(".changestatusoftime option:selected").text()} </div><div class="timelinesummary-contentbox timelinesummary-contentboxtime">  ${diffHrs} Hours : ${diffMins} Minutes</div></div>`);
+                       
+                        if($(this).attr("data-disabled"))
+                        {
+                            debugger;
+                            $(".timedetails .timelogsummary")
+                                .append(
+                                    `<div class="timelogbox pad10 timelinesummary-content" data-timespend="${timespend
+                                    }" data-disabled="true" data-statuscolor="1" ><div class ="timelinesummary-contentbox">Hours Updated</div><div class="timelinesummary-contentbox timelinesummary-contentboxtime">  ${
+                                    diffHrs} Hours : ${diffMins} Minutes</div></div>`);
+                        }
+                        else
+                        {
+                            $(".timedetails .timelogsummary")
+                                .append(
+                                    `<div class="timelogbox pad10 timelinesummary-content" data-timespend="${timespend
+                                    }" data-statuscolor="${$(this).find(".changestatusoftime").val()
+                                    }"><div class="timelinesummary-contentbox">${
+                                    $(this).find(".changestatusoftime option:selected").text()
+                                    } </div><div class="timelinesummary-contentbox timelinesummary-contentboxtime">  ${
+                                    diffHrs} Hours : ${diffMins} Minutes</div></div>`);
+                        }
                     });
                    
-                    var timespendforthistask = parseInt($(".timedetails .timelogsummary .timelogbox[data-statuscolor=1]").attr("data-timespend"));
+                    var timespendforthistask = parseInt($(".timedetails .timelogsummary .timelogbox[data-statuscolor=1]").not("[data-disabled]").attr("data-timespend"));
                     var diffDays = Math.floor(timespendforthistask / 86400000); // days
                     var diffHrs = Math.floor((timespendforthistask % 86400000) / 3600000); // hours
                     var diffMins = Math.round(((timespendforthistask % 86400000) % 3600000)

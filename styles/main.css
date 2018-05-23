@@ -395,7 +395,7 @@
  
  .timedetails .timelogbox[data-disabled]{
      border-bottom-color: rgb(149, 149, 149) !important;
-   
+
  }
  .timedetails .timelogbox[data-disabled] .timeline-icon{
      border-top-color: rgb(149, 149, 149) !important;
@@ -407,7 +407,7 @@
    .timedetails .timelogbox[data-disabled] .timeline-content{
      border: 2px solid rgb(149, 149, 149) !important;
    }
-   .timedetails .timelogbox[data-disabled] .timeline-content:before{
+   .timedetails .timelogbox[data-disabled] .timeline-content:before, .timelinesummary-content[data-disabled]{
      background: rgb(149, 149, 149) !important;
    }
    .timedetails .timelogbox[data-disabled] {

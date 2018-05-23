@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "OpenProject",
-  "version": "2.3",
+  "version": "2.7",
   "background": {
     "scripts": ["main.js"],
     "persistent": true
