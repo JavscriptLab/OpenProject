@@ -1,14 +1,14 @@
 {
   "manifest_version": 2,
   "name": "OpenProject",
-  "version": "2.0",
+  "version": "2.3",
   "background": {
     "scripts": ["main.js"],
     "persistent": true
   },
   "permissions": ["https://*/*",
     "http://*/*",
-    "tabs","management","debugger","activeTab","idle","storage"],
+    "tabs","management","debugger","activeTab","idle","storage","unlimitedStorage"],
   "minimum_chrome_version": "23",
   "content_scripts": [
     {

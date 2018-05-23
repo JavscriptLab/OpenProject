@@ -352,8 +352,8 @@ function(currentUserActivitiesList)
                                                 .each(function()
                                                 {
                                                     $(this).prop("disabled", true);
-                                                    if(result&&result.length>50){
-                                                        result.splice(0,result.length-50);
+                                                    if(result&&result.length>500){
+                                                        result.splice(0,result.length-500);
                                                       }
                                                       if (!result){
                                                         result=[];
@@ -404,8 +404,8 @@ function(currentUserActivitiesList)
         {if(th.length>0){
             activateinterval = false;
             
-                    if (result&&result.length > 70) {
-                        result.splice(0, result.length - 70);
+            if (result && result.length > 500) {
+                result.splice(0, result.length - 500);
                     }
                      if (!result){
                         result=[];
@@ -445,8 +445,8 @@ peekandsettime();
                                 if (!result) {
                                 result = [];
                                 }
-                                if(result&&result.length>50){
-                                    result.splice(0,result.length-50);
+                                if (result && result.length > 500) {
+                                    result.splice(0, result.length - 500);
                                   }
                                 changeactivity(th, result);
                                 keep("changedUserActivities", result);

@@ -229,41 +229,41 @@
    border-bottom: 1px solid #000000;
  }
  .timedetails.timedetailsprotheme .timelogbox[data-statuscolor="1"]{
-    border-bottom-color: #00b77a;
+    border-bottom-color: #077d56;
   }
  .timedetails .timelogbox[data-statuscolor="1"] .timeline-icon{
   
-   border-top-color: #00b77a;
-   border-right-color: #00b77a;
+   border-top-color: #077d56;
+   border-right-color: #077d56;
  }
  .timedetails .timelogbox[data-statuscolor="1"] .timeline-iconcontent,.timedetails.timedetailsprotheme .timelogbox[data-statuscolor="1"] .timelinesummary-contentbox {
-   color: #00b77a;
+   color: #077d56;
  }
  
  .timedetails .timelogbox[data-statuscolor="1"] .timeline-content{
-   border: 2px solid #00b77a;
+   border: 2px solid #077d56;
  }
  .timelinesummary-content[data-statuscolor="1"],
  .timedetails .timelogbox[data-statuscolor="1"] .timeline-content:before{
-   background: #00b77a;
+   background: #077d56;
  }
  
  .timedetails.timedetailsprotheme .timelogbox[data-status="inactive"][data-statuscolor="1"]{
-   border-bottom-color: #00b77a;
+   border-bottom-color: #2da071;
  }
  .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-icon{
  
-   border-top-color: #0ae69c;
-   border-right-color: #0ae69c;
+   border-top-color: #2da071;
+   border-right-color: #2da071;
  }
  .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-iconcontent ,.timedetails.timedetailsprotheme .timelogbox[data-status="inactive"][data-statuscolor="1"] .timelinesummary-contentbox{
-   color: #0ae69c;
+   color: #2da071;
  }
  .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-content{
-   border: 2px solid #0ae69c;
+   border: 2px solid #2da071;
  }
  .timedetails .timelogbox[data-status="inactive"][data-statuscolor="1"] .timeline-content:before{
-   background: #0ae69c;
+   background: #2da071;
  }
  .timedetails .timelogbox[data-statuscolor="2"]{
    border-bottom-color: #dd0725;
@@ -449,9 +449,17 @@
  .timedetailsprotheme .timelinesummary-content .timelinesummary-contentboxtime{
   color: #061d2e !important;
  }
- .timlinetimespan{
+ .timedetailsprotheme .timlinetimespan{
+   float: left;
+   padding-left: 2px;
+ }
+ .timedetails.timedetailsprotheme p {
+  line-height: 24px;
+}
+.timedetailsmodtheme .timlinetimespan{
    float: right;
    font-size: 13px;
+   padding-left: 2px;
  }
  @media only screen and (max-width: 1200px)  {
    .timedetails .timelog, .timedetails .timeloghead {
@@ -499,3 +507,6 @@
    border-bottom: 1px solid #FFFFFF;
    background-color: #FFFFFF;
  }
+ .timedetailsprotheme .timelog .timelogbox {
+ padding: 5px;
+}

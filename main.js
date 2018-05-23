@@ -37,8 +37,8 @@ var currentUserActivitiesList=[];
 chrome.storage.local.get("currentUserActivities", function (result) {
   if(!isEmpty(result)){
     currentUserActivitiesList= result.currentUserActivities;
-    if(currentUserActivitiesList.length>70){
-      currentUserActivitiesList.splice(0,currentUserActivitiesList.length-70);
+    if (currentUserActivitiesList.length > 500) {
+        currentUserActivitiesList.splice(0, currentUserActivitiesList.length - 500);
     }
   }
   var sortresults=currentUserActivitiesList.sort(function (a,b) {
@@ -78,8 +78,8 @@ chrome.idle.onStateChanged.addListener(function(state) {
   if(state != 'idle'){
   chrome.storage.local.get("currentUserActivities", function (result) {
     dateNow=new Date().toString();
-    if(result.currentUserActivities.length>70){
-      result.currentUserActivities.splice(0,result.currentUserActivities.length-70);
+    if (result.currentUserActivities.length > 500) {
+        result.currentUserActivities.splice(0, result.currentUserActivities.length - 500);
     }
     var sortresults=result.currentUserActivities.sort(function (a,b) {
       var adate = new Date(a.date);
