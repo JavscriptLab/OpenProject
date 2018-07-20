@@ -4,15 +4,12 @@
     var keep = function (key, value) {
         chrome.runtime.sendMessage({ method: "OPputDataByKey", value: value, key: key },
           function (response) {
-
           });
     };
     var peek = function (key, callback) {
         chrome.runtime.sendMessage({ method: "OPgetDataByKey", key: key },
            function (response) {
-
                callback(response);
-
            });
 
     };
