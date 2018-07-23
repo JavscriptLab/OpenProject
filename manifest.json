@@ -12,8 +12,8 @@
   "minimum_chrome_version": "23",
   "content_scripts": [
     {
-      "matches": [ "https://openproject.fingent.net/*" ],
-      "js": ["js/jquery.js", "js/openproject.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "js": [ "js/jquery.js", "js/openproject.js", "inject.js" ],
       "css": ["styles/main.css" ]
     }
   ],

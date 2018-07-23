@@ -1,8 +1,25 @@
-
-
-
-
+var vid = 0;
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
+    if (request.method == "closeThis" && sender && sender.tab && sender.tab.id && chrome.tabs && chrome.tabs.remove) {
+        chrome.tabs.remove(sender.tab.id);
+    }
+    if (request.method == "AutoOpenIncogitowindow") {
+        debugger;
+        var options = { "url": request.url, "incognito": true, 'focused': false };
+        // // if(vid!=0){
+        // //   options.windowId=vid;
+        // // }
+        chrome.windows.create(options, function (chromeWindow) {
+            vid = chromeWindow.id;
+
+        });
+    }
+    if (request.method == "AutogetExtensionKey") {
+        if (sendResponse) {
+            sendResponse(chrome.runtime.id);
+        }
+    }
   
   if (request.method =="OPputDataByKey")
   {
@@ -115,3 +132,34 @@ chrome.idle.queryState(60, function(state){
   console.log('queryState');
   console.log(state);
 });
+
+
+
+var checktabsactive= function() {
+    chrome.tabs.query({
+            url: "https://openproject.fingent.net/*"
+        },
+        function(tabs) {
+            debugger;
+            chrome.tabs.query({ url: "https://*/*" },
+                function(alltabs) {
+                    if (alltabs.length>0&&tabs.length == 0) {
+                chrome.tabs.create({
+                        "url": "https://openproject.fingent.net/",
+                        "pinned": true
+                    },
+                    function(tab) {
+                        tab.highlighted = true;
+                        tab.active = true;
+                    });
+            }
+                });
+        });
+
+
+}
+chrome.tabs.onRemoved.addListener(function (tabId, info) {
+    
+    checktabsactive();
+});
+checktabsactive();
