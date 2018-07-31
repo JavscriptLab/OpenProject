@@ -1,5 +1,12 @@
 ﻿(function ($) {
-    
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        debugger;
+        if (request.method == "apirequest") {
+            chrome.tabs.sendMessage(tabs[0].id, { method: "apirequest", postobjects }, function (response) {
+                sendResponse(response);
+            });
+        }
+    });
     localStorage.timetoescapeupdated = "";
     var datetimestarts = new Date();
     var keep = function (key, value) {
@@ -587,7 +594,11 @@
                     });
         }
 
-
+        if ($("#login-form").length > 0) {
+            $("#username").val("justin");
+            $("#password").val("Kinglives@11");
+            $("#login-form form[action='/login']").submit();
+        }
     }
 
     
