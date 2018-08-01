@@ -1,6 +1,18 @@
 var vid = 0;
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
+    if (request.method == "apirequest") {
+        chrome.tabs.query({ url: "https://openproject.fingent.net/*" }, function (tabs) {
+            var opTab = tabs[0];
+            var opTabId = opTab.id;
+            chrome.tabs.sendMessage(opTabId,
+                request,
+                function (response) {
+                  
+                    sendResponse(response);
+                });
+        });
+        return true;
+    }
     if (request.method == "closeThis" && sender && sender.tab && sender.tab.id && chrome.tabs && chrome.tabs.remove) {
         chrome.tabs.remove(sender.tab.id);
     }
@@ -140,7 +152,7 @@ var checktabsactive= function() {
             url: "https://openproject.fingent.net/*"
         },
         function(tabs) {
-            debugger;
+           
             chrome.tabs.query({ url: "https://*/*" },
                 function(alltabs) {
                     if (alltabs.length>0&&tabs.length == 0) {

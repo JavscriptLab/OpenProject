@@ -1,19 +1,24 @@
 ﻿(function ($) {
    
-    window.postMessage({
-        method: "apirequest",
-        url: window.location.href,
-        postobjects: {
-            url: "https://openproject.fingent.net/api/v3/work_packages/",
-            type: "GET",
-            success: function(data) {
+    if (window.parent == window) {
+        window.postMessage({
+            method: "apirequest",
+            url: window.location.href,
+            postobjects: {
+                url: "https://openproject.fingent.net/api/v3/work_packages/",
+                type: "GET",
+                successfn:"aftergetallworkpackages"
+            }
+            },
+            "*");
+
+        $("body").on("opupdate", "#aftergetallworkpackages",
+            function(e,data) {
                 debugger;
                 $("body").append("");
-            }
-        },
-        "*"
-    });
+            });
 
+    }
     ////$.ajax({
     ////    url: "https://openproject.fingent.net/api/v3/work_packages/",
     ////    ////data: { signature: authHeader },
