@@ -33,7 +33,7 @@
                     {},
                     function (result) {
                         var form = result._embedded.payload;
-
+                        form._links.status;
                     })
             });
 
