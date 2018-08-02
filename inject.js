@@ -30,6 +30,23 @@ chrome.runtime.onMessage.addListener(
                 sendResponse(result);
                 return true;
             }
+            var token = $('meta[name="csrf-token"]').attr('content');
+            if (token && request.postobjects.url.split("v3/").length==1) {
+                request.postobjects.headers = {
+                    'X-CSRF-TOKEN': token,
+                    'X-Authentication-Scheme' : 'Session',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': "no-cache",
+                    'Accept': "application/json;charset=utf-8",
+                    'Pragma': "no-cache",
+                    'Expires': 'Mon, 01 Jan 1990 00:00:00 GMT'
+                };
+                request.postobjects.accepts = {
+                    text: "application/json"
+                };
+                request.postobjects.contentType = "application/json; charset=utf-8";
+                
+            }
             $.ajax(request.postobjects);
         }
         return true;
@@ -48,10 +65,8 @@ window.addEventListener('message', function (event) {
         if (message.method == "apirequest") {
            
             chrome.runtime.sendMessage(message, function (response) {
-                debugger;
-                ////$("body").trigger(message.postobjects.successfn, response);
-                $("body").append("<input id='" + message.postobjects.successfn + "'/>");
-                $('#' + message.postobjects.successfn).trigger("update");
+                $("body").append("<input type='hidden' id='" + message.postobjects.successfn + "'/>");
+                $('#' + message.postobjects.successfn).val(JSON.stringify(response)).click();
             });
 
         }
@@ -77,28 +92,50 @@ setTimeout(function () {
             }
         }
         if (valid && (location != "" || src == "jquery.js" || window.top == window.self)) {
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.onload = function () {
-                if (callback) {
-                    callback();
+            if (src.split(".js").length > 1) {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.onload = function() {
+                    if (callback) {
+                        callback();
+                    }
                 }
-            }
-            if (src.split("http").length == 1) {
+                if (src.split("http").length == 1) {
 
-                getExtensionKey(function (extensionkey) {
-                    script.src = "chrome-extension://" + extensionkey + "/js/" + src;
-                });
+                    getExtensionKey(function(extensionkey) {
+                        script.src = "chrome-extension://" + extensionkey + "/js/" + src;
+                    });
+                } else {
+                    script.src = src;
+                }
+                document.head.appendChild(script);
             } else {
-                script.src = src;
+                var style = document.createElement('link');
+                style.type = 'text/css';
+                style.rel = 'stylesheet';
+                style.onload = function () {
+                    if (callback) {
+                        callback();
+                    }
+                }
+                if (src.split("http").length == 1) {
+
+                    getExtensionKey(function (extensionkey) {
+                        style.href = "chrome-extension://" + extensionkey + "/styles/" + src;
+                    });
+                } else {
+                    style.href = src;
+                }
+                document.head.appendChild(style);
             }
-            document.head.appendChild(script);
+            
         }
     }
 
     ls("jquery.js", "",
         function () {
             ls("op.js", "");
+            ls("op.css", "");
 
 
         });

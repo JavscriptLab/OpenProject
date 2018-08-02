@@ -13,11 +13,16 @@
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*" ],
+      "js": [ "js/jquery.js", "inject.js" ]
+    },
+    {
+      "matches": [ "https://openproject.fingent.net/*" ],
       "js": [ "js/jquery.js", "js/openproject.js", "inject.js" ],
-      "css": ["styles/main.css" ]
+      "css": [ "styles/main.css" ]
     }
   ],
   "web_accessible_resources": [
-    "js/*"
+    "js/*",
+    "styles/*"
   ]
 }
