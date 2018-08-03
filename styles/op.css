@@ -1,0 +1,15 @@
+#openprojectworkslist{
+ 
+ list-style: none !important;
+}
+.openprojectworkslistitem {
+    padding: 10px !important;
+    background-color: #7b797912;
+}
+
+.opiteminprogress {
+    background-color: #3d90e8;
+}
+    .opiteminprogress a {
+        color: white !important;
+    }

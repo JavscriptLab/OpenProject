@@ -25,15 +25,14 @@
         $("body").on("click",
             ".openprojectworkslistitem",
             function(e) {
-                $(".openprojectworkslistitem").removeClass("iteminprogress");
-                $(this).addClass("iteminprogress");
+                $(".openprojectworkslistitem").removeClass("opiteminprogress");
+                $(this).addClass("opiteminprogress");
                 
                 request("v3/work_packages/"+$(this).attr("data-id")+"/form",
                     "POST",
                     {},
                     function (result) {
                         var form = result._embedded.payload;
-                        form._links.status;
                     })
             });
 
@@ -62,9 +61,9 @@
                                 function(i, v) {
                                     $("#openprojectworkslist").append('<li data-id="' +
                                         v.id +
-                                        '" class="openprojectworkslistitem">' +
+                                        '" class="openprojectworkslistitem"><a>' +
                                         v.subject +
-                                        "</li>");
+                                        "</a></li>");
                                 });
 
 
