@@ -31,10 +31,24 @@ chrome.runtime.onMessage.addListener(
                 return true;
             }
             var token = $('meta[name="csrf-token"]').attr('content');
-            if (token && request.postobjects.url.split("v3/").length==1) {
+            if (token && request.postobjects.url.split("v3/").length == 1) {
                 request.postobjects.headers = {
                     'X-CSRF-TOKEN': token,
-                    'X-Authentication-Scheme' : 'Session',
+                    'X-Authentication-Scheme': 'Session',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': "no-cache",
+                    'Accept': "application/json;charset=utf-8",
+                    'Pragma': "no-cache",
+                    'Expires': 'Mon, 01 Jan 1990 00:00:00 GMT'
+                };
+                request.postobjects.accepts = {
+                    text: "application/json"
+                };
+
+            } else {
+                request.postobjects.headers = {
+                    'X-CSRF-TOKEN': token,
+                    'X-Authentication-Scheme': 'Session',
                     'X-Requested-With': 'XMLHttpRequest',
                     'Cache-Control': "no-cache",
                     'Accept': "application/json;charset=utf-8",
@@ -45,8 +59,10 @@ chrome.runtime.onMessage.addListener(
                     text: "application/json"
                 };
                 request.postobjects.contentType = "application/json; charset=utf-8";
-                
+            request.postobjects.dataType = "json";    
             }
+            
+            
             $.ajax(request.postobjects);
         }
         return true;

@@ -1,6 +1,6 @@
 #openprojectworkslist{
  
- list-style: none !important;
+    list-style: none !important;
 }
 .openprojectworkslistitem {
     padding: 10px !important;
@@ -10,6 +10,13 @@
 .opiteminprogress {
     background-color: #3d90e8;
 }
-    .opiteminprogress a {
-        color: white !important;
-    }
+.opiteminprogress a {
+    color: white !important;
+}
+#openprojectwindow {
+    position: relative;
+    /* right: 0px; */
+    float: right;
+    width: 300px;
+    /* z-index: -39; */
+}
