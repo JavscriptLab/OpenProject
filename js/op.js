@@ -1,4 +1,5 @@
 (function ($) {
+    return false;
     var myUserId = 0;
     if (window.parent == window) {
         var request = function(url, type, postdata, callback) {
